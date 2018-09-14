@@ -121,10 +121,13 @@ function initCannon() {
 
   // Create a slippery material (friction coefficient = 0.0)
   physicsMaterial = new CANNON.Material("slipperyMaterial")
-  var physicsContactMaterial = new CANNON.ContactMaterial(physicsMaterial,
+  var physicsContactMaterial = new CANNON.ContactMaterial(
     physicsMaterial,
-    0.0, // friction coefficient
-    0.3  // restitution
+    physicsMaterial, 
+    {
+      friction: 0.0,
+      restitution: 0.3
+    }
   )
   // We must add the contact materials to the world
   world.addContactMaterial(physicsContactMaterial)
@@ -162,16 +165,14 @@ function init() {
   if (true) {
     light.castShadow = true
 
-    light.shadowCameraNear = 20
-    light.shadowCameraFar = 50//camera.far
-    light.shadowCameraFov = 40
+    light.shadow.camera.near = 20
+    light.shadow.camera.far = 50
+    light.shadow.camera.fov = 40
 
-    light.shadowMapBias = 0.1
-    light.shadowMapDarkness = 0.7
-    light.shadowMapWidth = 2 * 512
-    light.shadowMapHeight = 2 * 512
-
-    //light.shadowCameraVisible = true
+    // light.shadow.bias = -0.001
+    // light.shadowMapDarkness = 0.7
+    light.shadow.mapSize.width = 2 * 512
+    light.shadow.mapSize.height = 2 * 512
   }
   scene.add(light)
 
@@ -193,7 +194,7 @@ function init() {
 
   renderer = new THREE.WebGLRenderer()
   renderer.shadowMapEnabled = true
-  renderer.shadowMapSoft = true
+  renderer.shadowMap.type = THREE.PCFSoftShadowMap
   renderer.setSize(window.innerWidth, window.innerHeight)
   renderer.setClearColor(scene.fog.color, 1)
 
@@ -301,7 +302,6 @@ function updateShootDir(shootDir) {
 }
 
 function fire() {
-  this.x
   var x = sphereBody.position.x
   var y = sphereBody.position.y
   var z = sphereBody.position.z
@@ -333,6 +333,7 @@ var intervalRef
 
 window.addEventListener("mousedown", function (e) {
   if (controls.enabled == true) {
+    fire()
     intervalRef = intervalRef || window.setInterval(fire, 200)
   }
 })

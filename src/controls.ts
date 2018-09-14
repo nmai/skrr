@@ -19,7 +19,6 @@ export class Controls {
   private moveLeft: boolean
   private moveRight: boolean
   private canJump: boolean
-  private velocity: Vec3
   private contactNormal: Vec3
   private upAxis: Vec3
   private pitchObject: Object3D
@@ -30,8 +29,6 @@ export class Controls {
     this.camera = camera
     this.cannonBody = cannonBody
     this.enabled = false
-  
-    this.velocity = new Vec3()
 
     this.pitchObject = new Object3D()
     this.pitchObject.add( camera )
@@ -116,7 +113,7 @@ export class Controls {
       
       case 32: // space
         if (this.canJump === true){
-          this.velocity.y = PLAYER_JUMP_VELOCITY
+          this.cannonBody.velocity.y = PLAYER_JUMP_VELOCITY
         }
         this.canJump = false
         break
@@ -188,8 +185,8 @@ export class Controls {
     //quat.multiplyVector3(inputVelocity)
     
     // Add to the object
-    this.velocity.x += inputVelocity.x
-    this.velocity.z += inputVelocity.z
+    this.cannonBody.velocity.x += inputVelocity.x
+    this.cannonBody.velocity.z += inputVelocity.z
     
     this.yawObject.position.copy(new Vector3(
       this.cannonBody.position.x,
