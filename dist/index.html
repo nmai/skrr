@@ -59,16 +59,22 @@
         </style>
     </head>
     <body>
-        <div id="blocker">
+      <script src="./Stats.js"></script>
+      <script>
+        var stats = new Stats()
+        stats.showPanel(0); // 0: fps, 1: ms, 2: mb, 3+: custom
+        document.body.appendChild(stats.dom)
+      </script>
+      <div id="blocker">
 
-            <div id="instructions">
-                <span style="font-size:40px">Click to play</span>
-                <br />
-                (W,A,S,D = Move, SPACE = Jump, MOUSE = Look, CLICK = Shoot)
-            </div>
-
+        <div id="instructions">
+          <span style="font-size:40px">Click to play</span>
+          <br />
+          (W,A,S,D = Move, SPACE = Jump, MOUSE = Look, CLICK = Shoot)
         </div>
 
-        <script src="./bundle.js"></script>
+      </div>
+
+      <script src="./bundle.js"></script>
     </body>
 </html>

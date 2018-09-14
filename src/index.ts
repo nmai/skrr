@@ -267,7 +267,9 @@ function onWindowResize() {
 
 var dt = 1 / 60
 function animate() {
-  requestAnimationFrame(animate)
+  //@ts-ignore
+  if (window.stats) window.stats.begin()
+
   if (controls.enabled) {
     world.step(dt)
 
@@ -288,6 +290,10 @@ function animate() {
   renderer.render(scene, camera)
   time = Date.now()
 
+  //@ts-ignore
+  if (window.stats) window.stats.end()
+
+  requestAnimationFrame(animate)
 }
 
 var ballShape = new CANNON.Sphere(0.05)
