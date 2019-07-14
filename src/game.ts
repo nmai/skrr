@@ -6,6 +6,7 @@ import { PhysicsEngine } from './physics-engine'
 import { Entity } from './entity'
 import { PlayerEntity } from './player-entity'
 import { BoxEntity } from './box-entity';
+import { FancyEntity } from './fancy-entity';
 
 const DT = 1 / 60
 
@@ -27,6 +28,9 @@ export class Game {
 
     this.playerEntity = new PlayerEntity(this.phys.world, this.scene)
     this.entities.push(this.playerEntity)
+
+    let fancyEntity = new FancyEntity(this.phys.world, this.scene)
+    fancyEntity.setPosition(0, 1, -5)
 
     this.initCameraAndControls()
     this.initBoxes()
