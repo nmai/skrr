@@ -9,9 +9,9 @@ export class Game {
 
   private world: CANNON.World = new CANNON.World()
   private playerBody: CANNON.Body = new CANNON.Body({ mass: PLAYER_MASS })
-  private boxes: Array<THREE.Body> = []
+  private boxes: Array<CANNON.Body> = []
   // private boxMeshes: Array<THREE.Mesh> = []
-  private balls: Array<THREE.Body> = []
+  private balls: Array<CANNON.Body> = []
   // private ballMeshes: Array<THREE.Mesh> = []
   private camera: THREE.Camera
   private controls: Controls

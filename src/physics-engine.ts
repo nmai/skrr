@@ -1,20 +1,21 @@
-import * as CANNON from 'cannon'
-import * as THREE from 'three'
+import {
+  World,
+  GSSolver,
+  SplitSolver,
+  NaiveBroadphase,
+  Material,
+  ContactMaterial,
+  Plane,
+  Body,
+  Vec3
+} from 'cannon'
 
-export class Arena {
-  private world: CANNON.World = new CANNON.World()
-  private boxes: Array<THREE.Body> = []
-  private balls: Array<THREE.Body> = []
-  private time: number
-  private renderer: THREE.Renderer
-  private scene: THREE.Scene
+export class PhysicsEngine {
+
+  private world: World
 
   constructor() {
-    this.initWorld()
-    this.initArena()
-    this.initScene()
-
-    this.animate()
+    this.world = new CANNON.World()
   }
 
   private initWorld() {
@@ -39,8 +40,10 @@ export class Arena {
     this.world.broadphase = new CANNON.NaiveBroadphase()
   }
 
-  private initArena() {
+  private initCannon() {
     let physicsMaterial, walls = []
+
+    let playerShape = new CANNON.Sphere(PLAYER_RADIUS)
 
     // Create a slippery material (friction coefficient = 0.0)
     physicsMaterial = new CANNON.Material("slipperyMaterial")
@@ -54,6 +57,12 @@ export class Arena {
     )
     // We must add the contact materials to the world
     this.world.addContactMaterial(physicsContactMaterial)
+
+    // Create a sphere
+    this.playerBody.addShape(playerShape)
+    this.playerBody.position.set(0, 5, 0)
+    this.playerBody.linearDamping = 0.9
+    this.world.addBody(this.playerBody)
 
     // Create a plane
     var groundShape = new CANNON.Plane()
