@@ -31,6 +31,9 @@ export class Game {
 
     let fancyEntity = new FancyEntity(this.phys.world, this.scene)
     fancyEntity.setPosition(0, 1, -5)
+    this.entities.push(fancyEntity)
+
+    this.scene.add(new THREE.AxesHelper(5))
 
     this.initCameraAndControls()
     this.initBoxes()
@@ -114,19 +117,20 @@ export class Game {
   animate() {
     //@ts-ignore
     if (window.stats) window.stats.begin()
-
+    let delta = Date.now() - this.time
+    this.time = Date.now()
     if (this.controls.enabled) {
       this.phys.world.step(DT)
 
       for (let entity of this.entities) {
-        entity.animate()
+        entity.animate(delta)
       }
       
     }
 
-    this.controls.update(Date.now() - this.time)
+    this.controls.update(delta)
     this.renderer.render(this.scene, this.camera)
-    this.time = Date.now()
+    
 
     //@ts-ignore
     if (window.stats) window.stats.end()
