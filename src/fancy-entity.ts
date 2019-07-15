@@ -23,27 +23,18 @@ export class FancyEntity extends Entity {
   box2: Three.Mesh
   leftLeg: Three.Mesh
   rightLeg: Three.Mesh
+  legDirection: number
 
   constructor(world: Cannon.World, scene: Three.Scene) {
     super(world, scene)
+    this.legDirection = 1
   }
   
   animate(delta: number) {
     this.container.position.copy(this.body.position)
     this.container.quaternion.copy(this.body.quaternion)
-
-    
-    // this.box2.quaternion.copy(this.body.quaternion)
-    let posvector = new Three.Vector3(0,5,0)
-    this.box2.position.add(posvector)
-
-    // 360 degrees per second
-    let angle = 360 * (Math.PI / 180) * (delta / 1000)
-
-    this.leftLeg.applyMatrix(new Three.Matrix4().makeRotationX(angle))
-    this.rightLeg.applyMatrix(new Three.Matrix4().makeRotationX(-angle))
-    
-    
+  
+    this.swing(delta)
   }
 
   setPosition(x: number, y: number, z: number) {
@@ -51,8 +42,19 @@ export class FancyEntity extends Entity {
     this.container.position.set(x, y, z)
   }
 
-  swing() {
+  swing(delta: number) {
+    if (this.leftLeg.rotation.x >= .2618){  //replace this number with pi/12
+      this.legDirection = -1
+    }
+    if (this.leftLeg.rotation.x <= -.2618){
+      this.legDirection = 1
+    }
     
+    // 360 degrees per second
+    let angle = this.legDirection * 60 * (Math.PI / 180) * (delta / 1000)
+
+    this.leftLeg.applyMatrix(new Three.Matrix4().makeRotationX(angle))
+    this.rightLeg.applyMatrix(new Three.Matrix4().makeRotationX(-angle))
   }
 
   _initMeshes() {
