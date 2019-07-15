@@ -1,7 +1,7 @@
 import * as Three from 'three'
 import * as Cannon from 'cannon'
 import { Entity } from './entity'
-import { Quaternion, leftleg } from 'three';
+import { Quaternion, leftLeg } from 'three';
 
 
 const METER = 1
@@ -21,7 +21,8 @@ export class FancyEntity extends Entity {
 
   torso: Three.Mesh
   box2: Three.Mesh
-  leftleg: Three.Mesh
+  leftLeg: Three.Mesh
+  rightLeg: Three.Mesh
 
   constructor(world: Cannon.World, scene: Three.Scene) {
     super(world, scene)
@@ -40,7 +41,8 @@ export class FancyEntity extends Entity {
     // this.box2.rotateOnAxis(new Three.Vector3(1,0,0), angle)
     // this.box2.applyMatrix(new Three.Matrix4().makeRotationFromQuaternion(new Three.Quaternion(angle,0,0,Math.PI/2)))
 
-    this.leftleg.applyMatrix(new Three.Matrix4().makeRotationX(angle))
+    this.leftLeg.applyMatrix(new Three.Matrix4().makeRotationX(angle))
+    this.rightLeg.applyMatrix(new Three.Matrix4().makeRotationX(-angle))
     
     
   }
@@ -58,14 +60,15 @@ export class FancyEntity extends Entity {
     this.container = new Three.Object3D()
     this._scene.add(this.container)
 
-    let boxGeometry = new Three.BoxGeometry(TORSO_WIDTH * 2, TORSO_LENGTH * 2, THICKNESS * 2)
     let boxMaterial = new Three.MeshLambertMaterial({ color: 0xff0000 })
 
-    this.torso = new Three.Mesh(boxGeometry, boxMaterial)
+    let torsoGeometry = new Three.BoxGeometry(TORSO_WIDTH, TORSO_LENGTH, THICKNESS)
+    this.torso = new Three.Mesh(torsoGeometry, boxMaterial)
     this.torso.castShadow = true
     this.torso.receiveShadow = true
     //this._scene.add(this.torso)
     this.torso.position.set(0,TORSO_LENGTH/2,0)
+    this.container.add(this.torso)
 
   
     let boxGeometry2 = new Three.BoxGeometry(METER_VECTOR.x * 2, METER_VECTOR.y * 2, METER_VECTOR.z * 2)
@@ -75,16 +78,20 @@ export class FancyEntity extends Entity {
     this.box2.receiveShadow = true
     this.container.add(this.box2)
     
-    let boxGeometry3 = new Three.BoxGeometry(.1, .25, .1)  //LEG
+    let boxGeometry3 = new Three.BoxGeometry(LEG_WIDTH, LEG_LENGTH, LEG_WIDTH)  //LEG
     let blueboxMaterial = new Three.MeshLambertMaterial({ color: 0x0000ff })
-    this.leftleg = new Three.Mesh(boxGeometry3, blueboxMaterial)
-    this.leftleg.castShadow = true
-    this.leftleg.receiveShadow = true
-    this.container.add(this.leftleg)
 
-    this.container.add(this.torso)
+    this.rightLeg = new Three.Mesh(boxGeometry3, blueboxMaterial)
+    this.rightLeg.castShadow = true
+    this.rightLeg.receiveShadow = true
+    this.container.add(this.rightLeg)
+    this.rightLeg.position.set(-TORSO_WIDTH/2,-LEG_LENGTH/2,0)
 
-    this.leftleg.position.set(TORSO_WIDTH/2,LEG_LENGTH/2,0)
+    this.leftLeg = new Three.Mesh(boxGeometry3, blueboxMaterial)
+    this.leftLeg.castShadow = true
+    this.leftLeg.receiveShadow = true
+    this.container.add(this.leftLeg)
+    this.leftLeg.position.set(TORSO_WIDTH/2,-LEG_LENGTH/2,0)
 
     // this.box2.position.set(1,1,1)
   }
