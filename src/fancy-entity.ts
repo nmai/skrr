@@ -35,10 +35,9 @@ export class FancyEntity extends Entity {
     // this.box2.quaternion.copy(this.body.quaternion)
     let posvector = new Three.Vector3(0,5,0)
     this.box2.position.add(posvector)
-    let angle = (Math.PI/180)
-    console.log(angle)
-    // this.box2.rotateOnAxis(new Three.Vector3(1,0,0), angle)
-    // this.box2.applyMatrix(new Three.Matrix4().makeRotationFromQuaternion(new Three.Quaternion(angle,0,0,Math.PI/2)))
+
+    // 360 degrees per second
+    let angle = 360 * (Math.PI / 180) * (delta / 1000)
 
     this.leftleg.applyMatrix(new Three.Matrix4().makeRotationX(angle))
     
