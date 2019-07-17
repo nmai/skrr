@@ -192,4 +192,3 @@ export class Game {
 //   window.clearInterval(intervalRef)
 //   intervalRef = void (0)
 // })
-

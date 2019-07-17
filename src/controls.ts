@@ -1,5 +1,6 @@
 import { Camera, Object3D, Vector3, Euler, Quaternion } from 'three'
 import { Body, Vec3 } from 'cannon'
+import { Game } from './game'
 
 //@TODO: do we need to move these to a constants file? maybe not
 const PI_2 = Math.PI / 2
@@ -25,7 +26,7 @@ export class Controls {
   private yawObject: Object3D
   private quat: Quaternion
 
-  constructor(camera: Camera, cannonBody: Body) {
+  constructor(camera: Camera, cannonBody: Body, game: Game) {
     this.camera = camera
     this.cannonBody = cannonBody
     this.enabled = false
@@ -72,6 +73,28 @@ export class Controls {
     // If contactNormal.dot(upAxis) is between 0 and 1, we know that the contact normal is somewhat in the up direction.
     if (this.contactNormal.dot(this.upAxis) > 0.5) // Use a "good" threshold value between 0 and 1 here!
       this.canJump = true
+  }
+
+
+// var intervalRef
+
+// window.addEventListener("mousedown", function (e) {
+//   if (controls.enabled == true) {
+//     fire()
+//     intervalRef = intervalRef || window.setInterval(fire, 200)
+//   }
+// })
+
+// window.addEventListener("mouseup", function (e) {
+//   window.clearInterval(intervalRef)
+//   intervalRef = void (0)
+// })
+
+  private onMouseDown(event: MouseEvent) {
+    if (controls.enabled == true) {
+      fire()
+      intervalRef = intervalRef || window.setInterval(fire, 200)
+    }
   }
   
   private onMouseMove(event: MouseEvent | any) {  //@TODO: find a replacement for built-in DOM types supporting vendor prefix
@@ -187,6 +210,7 @@ export class Controls {
     // Add to the object
     this.cannonBody.velocity.x += inputVelocity.x
     this.cannonBody.velocity.z += inputVelocity.z
+    this.cannonBody.quaternion.setFromAxisAngle(new Vec3(0,1,0), euler.y)
     
     this.yawObject.position.copy(new Vector3(
       this.cannonBody.position.x,
