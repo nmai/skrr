@@ -15,7 +15,7 @@ export abstract class Entity {
     this._initBody()
   }
 
-  animate() {}
+  animate(delta: number) {}
 
   setPosition(x: number, y: number, z: number) {}
 

@@ -83,7 +83,7 @@ export class Game {
     this.renderer.shadowMap.enabled = true
     this.renderer.shadowMap.type = THREE.PCFSoftShadowMap
     this.renderer.setSize(window.innerWidth, window.innerHeight)
-    this.renderer.setClearColor(this.scene.fog.color, 1)
+    this.renderer.setClearColor(this.scene.fog.color, 1) 
 
     document.body.appendChild(this.renderer.domElement)
   }
