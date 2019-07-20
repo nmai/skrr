@@ -1,6 +1,6 @@
 import { Camera, Object3D, Vector3, Euler, Quaternion } from 'three'
 import { Body, Vec3 } from 'cannon'
-import { Game } from './game'
+import { Game } from '../common/game'
 
 //@TODO: do we need to move these to a constants file? maybe not
 const PI_2 = Math.PI / 2

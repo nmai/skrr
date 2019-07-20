@@ -1,7 +1,7 @@
 import * as CANNON from 'cannon'
 import * as THREE from 'three'
-import { Controls } from './controls'
-import { PointerLockScreen } from './pointer-lock-screen'
+import { Controls } from '../client/controls'
+import { PointerLockScreen } from '../client/pointer-lock-screen'
 import { PhysicsEngine } from './physics-engine'
 import { Entity } from './entity'
 import { PlayerEntity } from './player-entity'
@@ -36,6 +36,7 @@ export class Game {
     this.initCameraAndControls()
     this.initBoxes()
     this.animate()
+
   }
 
   private initScene() {
