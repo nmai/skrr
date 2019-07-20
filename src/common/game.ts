@@ -120,7 +120,7 @@ export class Game {
     this.time = Date.now()
 
     if (this.controls.enabled) {
-      this.phys.world.step(delta)
+      this.phys.world.step(delta/1000)
 
       for (let entity of this.entities) {
         entity.animate(delta)

@@ -9,6 +9,7 @@ import {
   Body,
   Vec3
 } from 'cannon'
+import { MATERIALS, CONTACT_MATERIALS } from './constants'
 
 export class PhysicsEngine {
 
@@ -30,6 +31,11 @@ export class PhysicsEngine {
     this.world.defaultContactMaterial.contactEquationStiffness = 1e9
     this.world.defaultContactMaterial.contactEquationRelaxation = 4
 
+    // We must add the contact materials to the world
+    Object.keys(CONTACT_MATERIALS).forEach(key => {
+      this.world.addContactMaterial(CONTACT_MATERIALS[key])
+    })
+
     solver.iterations = 7
     solver.tolerance = 0.1
     var split = true
@@ -45,23 +51,9 @@ export class PhysicsEngine {
   }
 
   private _initMap() {
-
-    // Create a slippery material (friction coefficient = 0.0)
-    let physicsMaterial = new Material("slipperyMaterial")
-    let physicsContactMaterial = new ContactMaterial(
-      physicsMaterial,
-      physicsMaterial,
-      {
-        friction: 0.0,
-        restitution: 0.3
-      }
-    )
-    // We must add the contact materials to the world
-    this.world.addContactMaterial(physicsContactMaterial)
-
     // Create a plane
     var groundShape = new Plane()
-    var groundBody = new Body({ mass: 0 })
+    var groundBody = new Body({ mass: 0, material: MATERIALS.groundMaterial })
     groundBody.addShape(groundShape)
     groundBody.quaternion.setFromAxisAngle(new Vec3(1, 0, 0), -Math.PI / 2)
     this.world.addBody(groundBody)

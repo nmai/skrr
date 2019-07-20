@@ -6,7 +6,7 @@ import { Game } from '../common/game'
 const PI_2 = Math.PI / 2
 
 const EYE_Y_POS = 2 // eyes are 2 meters above the ground
-const PLAYER_VELOCITY_FACTOR = 0.2
+const PLAYER_VELOCITY_FACTOR = 10
 const PLAYER_JUMP_VELOCITY = 20
 
 export class Controls {
@@ -186,17 +186,17 @@ export class Controls {
     inputVelocity.set(0,0,0)
     
     if ( this.moveForward ){
-      inputVelocity.z = -PLAYER_VELOCITY_FACTOR * delta
+      inputVelocity.z = -PLAYER_VELOCITY_FACTOR
     }
     if ( this.moveBackward ){
-      inputVelocity.z = PLAYER_VELOCITY_FACTOR * delta
+      inputVelocity.z = PLAYER_VELOCITY_FACTOR
     }
     
     if ( this.moveLeft ){
-      inputVelocity.x = -PLAYER_VELOCITY_FACTOR * delta
+      inputVelocity.x = -PLAYER_VELOCITY_FACTOR
     }
     if ( this.moveRight ){
-      inputVelocity.x = PLAYER_VELOCITY_FACTOR * delta
+      inputVelocity.x = PLAYER_VELOCITY_FACTOR
     }
     
     // Convert velocity to world coordinates
@@ -208,13 +208,13 @@ export class Controls {
     //quat.multiplyVector3(inputVelocity)
     
     // Add to the object
-    this.cannonBody.velocity.x += inputVelocity.x
-    this.cannonBody.velocity.z += inputVelocity.z
+    this.cannonBody.velocity.x = inputVelocity.x
+    this.cannonBody.velocity.z = inputVelocity.z
     this.cannonBody.quaternion.setFromAxisAngle(new Vec3(0,1,0), euler.y)
     
     this.yawObject.position.copy(new Vector3(
       this.cannonBody.position.x,
-      this.cannonBody.position.y,
+      this.cannonBody.position.y + .8,
       this.cannonBody.position.z
     ))
   }

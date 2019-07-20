@@ -1,6 +1,7 @@
 import * as Three from 'three'
 import * as Cannon from 'cannon'
 import { Entity } from './entity'
+import { MATERIALS, CONTACT_MATERIALS } from './constants'
 
 const PLAYER_MASS = 5,
       METER = 1,
@@ -28,7 +29,6 @@ export class PlayerEntity extends Entity {
   }
 
   animate(delta: number) {
-    console.log(this.body.position)
     this.container.position.copy(this.body.position)
     this.container.quaternion.copy(this.body.quaternion)
 
@@ -71,7 +71,12 @@ export class PlayerEntity extends Entity {
 
   _initBody() {
     var boxShape = new Cannon.Box(METER_VECTOR)
-    var boxBody = new Cannon.Body({ mass: PLAYER_MASS })
+    var boxBody = new Cannon.Body({ 
+      mass: PLAYER_MASS, 
+      angularDamping: 1,
+      material: MATERIALS.playerMaterial
+    })
+
     boxBody.addShape(boxShape)
     this.body = boxBody
     this._world.addBody(boxBody)
