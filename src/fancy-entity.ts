@@ -23,6 +23,7 @@ export class FancyEntity extends Entity {
   box2: Three.Mesh
   leftLeg: Three.Mesh
   rightLeg: Three.Mesh
+  head: Three.Mesh
   legDirection: number
 
   constructor(world: Cannon.World, scene: Three.Scene) {
@@ -43,18 +44,23 @@ export class FancyEntity extends Entity {
   }
 
   swing(delta: number) {
-    if (this.leftLeg.rotation.x >= .2618){  //replace this number with pi/12
+    let swingSize = Math.PI/9
+    if (this.leftLeg.rotation.x >= swingSize){
       this.legDirection = -1
     }
-    if (this.leftLeg.rotation.x <= -.2618){
+    if (this.leftLeg.rotation.x <= -swingSize){
       this.legDirection = 1
     }
-    
-    // 360 degrees per second
-    let angle = this.legDirection * 60 * (Math.PI / 180) * (delta / 1000)
 
-    this.leftLeg.applyMatrix(new Three.Matrix4().makeRotationX(angle))
-    this.rightLeg.applyMatrix(new Three.Matrix4().makeRotationX(-angle))
+    let velocity = Math.cos(this.leftLeg.rotation.x*(2*Math.PI/5)/(Math.PI/9))
+    let angle = Math.min(this.legDirection * 200 * (Math.PI / 180) * (Math.min(delta,100) / 1000))
+    //console.log("velocity ", velocity)
+    console.log("angle ", angle)
+    console.log("delta ", delta)
+
+    this.leftLeg.applyMatrix(new Three.Matrix4().makeRotationX(velocity*angle))
+    this.rightLeg.applyMatrix(new Three.Matrix4().makeRotationX(-velocity*angle))
+
   }
 
   _initMeshes() {
@@ -93,6 +99,13 @@ export class FancyEntity extends Entity {
     this.leftLeg.receiveShadow = true
     this.container.add(this.leftLeg)
     this.leftLeg.position.set(TORSO_WIDTH/2,-LEG_LENGTH/2,0)
+
+    let boxGeometry4 = new Three.BoxGeometry(THICKNESS, HEAD_HEIGHT, THICKNESS) 
+    this.head = new Three.Mesh(boxGeometry4, blueboxMaterial)
+    this.head.castShadow = true
+    this.head.receiveShadow = true
+    this.container.add(this.head)
+    this.head.position.set(0,TORSO_LENGTH+(HEAD_HEIGHT/2),0)
 
     // this.box2.position.set(1,1,1)
   }
